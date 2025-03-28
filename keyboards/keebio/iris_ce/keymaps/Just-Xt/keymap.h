@@ -1,0 +1,27 @@
+#pragma once
+#include QMK_KEYBOARD_H
+
+// CA-FR shortcuts
+#define AMPER LSFT(KC_7)
+#define PIPE LSFT(KC_GRAVE)
+#define UNDRSC LSFT(KC_MINUS)
+#define BSLASH RALT(KC_GRAVE)
+#define HSHTG RALT(KC_SCLN)
+
+#define LCRLBRC RALT(KC_QUOTE)
+#define RCRLBRC RALT(KC_BSLS)
+#define LSQRBRC RALT(KC_LBRC)
+#define RSQRBRC RALT(KC_RBRC)
+#define LTHAN KC_BSLS
+#define GTHAN LSFT(KC_BSLS)
+
+// Home row mods
+#define HRM_A LGUI_T(KC_A)
+#define HRM_S LALT_T(KC_S)
+#define HRM_D LCTL_T(KC_D)
+#define HRM_F LSFT_T(KC_F)
+
+#define HRM_J RSFT_T(KC_J)
+#define HRM_K RCTL_T(KC_K)
+#define HRM_L LALT_T(KC_L)
+#define HRM_SCLN RGUI_T(KC_SCLN)
