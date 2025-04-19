@@ -77,73 +77,30 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
+bool override_hold(uint16_t hold_keycode, keyrecord_t *record) {
+   if (!record->tap.count && record->event.pressed) {
+      tap_code16(hold_keycode);
+      return false;
+   }
+   return true;
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
          case LT(0, KC_LBRC):
-            if (record->tap.count && record->event.pressed) { // Tap
-               return true;
-               break;
-            } 
-            else if (record->event.pressed) { // Hold
-               tap_code16(KC_RBRC);
-               return false;
-            }
-            return true;
+            return override_hold(KC_RBRC, record);
             
          case LT(0, KC_2):
-            if (record->tap.count && record->event.pressed) { // Tap
-               return true;
-               break;
-            } 
-            else if (record->event.pressed) { // Hold
-               tap_code16(RALT(KC_2));
-               return false;
-            }
-            return true;
-            
-         case LT(0, KC_Z):
-            if (record->tap.count && record->event.pressed) { // Tap
-               return true;
-               break;
-            } 
-            else if (record->event.pressed) { // Hold
-               tap_code16(RCTL(KC_Z));
-               return false;
-            }
-            return true;
+            return override_hold(RALT(KC_2), record);
             
          case LT(0, KC_X):
-            if (record->tap.count && record->event.pressed) { // Tap
-               return true;
-               break;
-            } 
-            else if (record->event.pressed) { // Hold
-               tap_code16(RCTL(KC_X));
-               return false;
-            }
-            return true;
+            return override_hold(RCTL(KC_X), record);
             
          case LT(0, KC_C):
-            if (record->tap.count && record->event.pressed) { // Tap
-               return true;
-               break;
-            } 
-            else if (record->event.pressed) { // Hold
-               tap_code16(RCTL(KC_C));
-               return false;
-            }
-            return true;
+            return override_hold(RCTL(KC_C), record);
             
          case LT(0, KC_V):
-            if (record->tap.count && record->event.pressed) { // Tap
-               return true;
-               break;
-            } 
-            else if (record->event.pressed) { // Hold
-               tap_code16(RCTL(KC_V));
-               return false;
-            }
-            return true;
+            return override_hold(RCTL(KC_V), record);
     }
     return true;
 }
