@@ -1,141 +1,91 @@
 #include QMK_KEYBOARD_H
 
-bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    const bool caps_lock = host_keyboard_led_state().caps_lock;
-    const uint8_t layer = get_highest_layer(layer_state);
-    HSV matrix_hsv = rgb_matrix_get_hsv();
-    
-   // if (!caps_lock && !layer)
-   //    return false;
+uint8_t get_horizontal_gradient_index(uint8_t row, uint8_t col) {
+   if (row == 0) {
+      return col;  // Left: 0–5
+  } else if (row == 5) {
+      return 11 - col;  // Right: 11–6
+  }
+  return 0;
+}
 
+uint8_t get_hue_for_index(uint8_t grad_index, uint8_t total_keys) {
+   if (total_keys < 2) return 0;  // Prevent divide-by-zero or flat color
+   return (uint8_t)(((uint16_t)(255 * grad_index) / total_keys) % 256);
+}
+
+void rgb_matrix_set_color_hsv(uint8_t index, HSV hsv) {
+   RGB rgb = hsv_to_rgb(hsv);
+   rgb_matrix_set_color(index, rgb.r, rgb.g, rgb.b);
+}
+
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+   const bool caps_lock = host_keyboard_led_state().caps_lock;
+   const bool caps_word = is_caps_word_on();
+   HSV matrix_hsv = rgb_matrix_get_hsv();
+    
    for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
       for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
          const uint8_t index = g_led_config.matrix_co[row][col];
-
+         
          if (index < led_min || index >= led_max)
-               continue;
+            continue;
 
-         HSV hsv;
-         hsv.s = 255;
-         hsv.v = matrix_hsv.v;
-
-         uint16_t kc = keymap_key_to_keycode(layer, (keypos_t){col,row});
-
-         // uint16_t kc = layer 
-         //    ? keymap_key_to_keycode(layer, (keypos_t){col,row}) 
-         //    : -1; // Leave at -1 because 0 is KC_NO!
+         HSV hsv = {
+            .s = 222,
+            .v = matrix_hsv.v
+         };
+         
+         // Whole top row, Rainbow gradient animation
+         if (row == 0 || row == 5)
+         {
+            bool reverse = false; // or toggle based on layer/state
             
-         switch (kc) {
-            case QK_BOOT:
-               hsv.h = 0;
-               break;
+            uint8_t grad_index = reverse 
+               ? (11 - get_horizontal_gradient_index(row, col)) 
+               : get_horizontal_gradient_index(row, col);
                
-            // Numbers
-            case KC_1:
-               hsv.h = 0;
-               break;
-            case H_2:
-               hsv.h = 26;
-               break;
-            case KC_3:
-               hsv.h = 51;
-               break;
-            case KC_4:
-               hsv.h = 77;
-               break;
-            case KC_5:
-               hsv.h = 102;
-               break;
-            case KC_6:
-               hsv.h = 128;
-               break;
-            case KC_7:
-               hsv.h = 153;
-               break;
-            case KC_8:
-               hsv.h = 179;
-               break;
-            case KC_9:
-               hsv.h = 204;
-               break;
-            case KC_0:
-               hsv.h = 230;
-               break;
-               
-            // F keys
-            case KC_F12:
-               hsv.h = 0;
-               break;
-            case KC_F1:
-               hsv.h = 21;
-               break;
-            case KC_F2:
-               hsv.h = 43;
-               break;
-            case KC_F3:
-               hsv.h = 64;
-               break;
-            case KC_F4:
-               hsv.h = 85;
-               break;
-            case KC_F5:
-               hsv.h = 106;
-               break;
-            case KC_F6:
-               hsv.h = 128;
-               break;
-            case KC_F7:
-               hsv.h = 149;
-               break;
-            case KC_F8:
-               hsv.h = 170;
-               break;
-            case KC_F9:
-               hsv.h = 191;
-               break;
-            case KC_F10:
-               hsv.h = 213;
-               break;
-            case KC_F11:
-               hsv.h = 234;
-               break;
-               
-            case KC_RIGHT ... KC_UP:
-               hsv.h = 135;
-               break;
-               
-            case KC_HOME ... KC_END:
-               hsv.h = 160;
-               break;
-               
-            case KC_MS_U ... KC_WH_R:
-               hsv.h = 222;
-               break;   
-               
-            // case KC_F13 ... KC_F24:
-            //    hsv.h = 85;
-            //    break;
-               
-            case KC_PSCR:
-               hsv.s = 0;
-               break;
-               
-            case KC_NO:
-               hsv.v = 0;
-               break;
+            hsv.h = get_hue_for_index(grad_index, 12);
             
-            default:
-               if (caps_lock 
-                  && ((row == 1 && col == 5) || (row == 6 && col == 5)))
-                  // sets hue to opposite color on hsv circle, and cuts saturation in half
-                  hsv.h = matrix_hsv.h+128, hsv.s >>= 1,
-                  hsv.v = RGB_MATRIX_MAXIMUM_BRIGHTNESS;
-               else
-                  continue;
+            rgb_matrix_set_color_hsv(index, hsv);
+            continue;
          }
-
-         RGB rgb = hsv_to_rgb(hsv);
-         rgb_matrix_set_color(index, rgb.r, rgb.g, rgb.b);
+         
+         // Weird thumb key left
+         if ((row == 4 && col == 5))
+         {
+            if (caps_lock) {
+               // sets hue to opposite color on hsv circle, and cuts saturation in half
+               hsv.h = (matrix_hsv.h + 128) % 256, 
+               hsv.s >>= 1,
+               hsv.v = RGB_MATRIX_MAXIMUM_BRIGHTNESS;
+               rgb_matrix_set_color_hsv(index, hsv);
+               continue;
+            }
+            
+            // Base color applied here
+            continue;
+         }
+         
+         // Weird thumb key right
+         if ((row == 9 && col == 5))
+         {
+            if (caps_word) {
+               // sets hue to opposite color on hsv circle, and cuts saturation in half
+               hsv.h = (matrix_hsv.h + 128) % 256, 
+               hsv.s >>= 1,
+               hsv.v = RGB_MATRIX_MAXIMUM_BRIGHTNESS;
+               rgb_matrix_set_color_hsv(index, hsv);
+               continue;
+            }
+            
+            // Base color applied here
+            continue;
+         }
+         
+         // Set everything else to off
+         hsv.v = 0;
+         rgb_matrix_set_color_hsv(index, hsv);
       }
    }
 
