@@ -19,6 +19,16 @@ void rgb_matrix_set_color_hsv(uint8_t index, HSV hsv) {
    rgb_matrix_set_color(index, rgb.r, rgb.g, rgb.b);
 }
 
+// Sets hue to opposite color on HSV circle, and cuts saturation in half
+static void apply_inverted_indicator_color(uint8_t index, HSV matrix_hsv) {
+   HSV hsv = {
+      .h = (matrix_hsv.h + 128) % 256,
+      .s = matrix_hsv.s >> 1,
+      .v = RGB_MATRIX_MAXIMUM_BRIGHTNESS
+   };
+   rgb_matrix_set_color_hsv(index, hsv);
+}
+
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
    const bool caps_lock = host_keyboard_led_state().caps_lock;
    const bool caps_word = is_caps_word_on();
@@ -55,11 +65,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
          if ((row == 4 && col == 5))
          {
             if (caps_lock) {
-               // sets hue to opposite color on hsv circle, and cuts saturation in half
-               hsv.h = (matrix_hsv.h + 128) % 256, 
-               hsv.s >>= 1,
-               hsv.v = RGB_MATRIX_MAXIMUM_BRIGHTNESS;
-               rgb_matrix_set_color_hsv(index, hsv);
+               apply_inverted_indicator_color(index, matrix_hsv);
                continue;
             }
             
@@ -71,11 +77,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
          if ((row == 9 && col == 5))
          {
             if (caps_word) {
-               // sets hue to opposite color on hsv circle, and cuts saturation in half
-               hsv.h = (matrix_hsv.h + 128) % 256, 
-               hsv.s >>= 1,
-               hsv.v = RGB_MATRIX_MAXIMUM_BRIGHTNESS;
-               rgb_matrix_set_color_hsv(index, hsv);
+               apply_inverted_indicator_color(index, matrix_hsv);
                continue;
             }
             
