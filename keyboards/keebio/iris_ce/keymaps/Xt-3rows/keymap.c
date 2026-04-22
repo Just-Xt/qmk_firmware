@@ -28,7 +28,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────-────┼──────-──┼────-────┼────-────┼──-──────┼────-────┤                            ├─────-───┼────-────┼──-──────┼───-─────┼──-──────┼────-────┤
      KC_TAB,   HRM_A,    HRM_S,    HRM_D,    HRM_F,    KC_G,                                  KC_H,     HRM_J,    HRM_K,    HRM_L,    HRM_SCLN, KC_QUOT,
   //├──────-──┼─────-───┼────-────┼─────-───┼───-─────┼───-─────┼───-─────┐        ┌───-─────┼────-────┼───-─────┼─────-───┼─────-───┼─────-───┼───-─────┤
-     KC_DEL,    KC_Z,     H_X,      H_C,      H_V,      KC_B,     KC_BSPC,           RGB_TOG,  KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_NO,
+     KC_DEL,   KC_Z,     H_X,      H_C,      H_V,      KC_B,     KC_BSPC,           UG_TOGG,  KC_N,     KC_M,  LT(0, KC_COMM), KC_DOT,  KC_SLSH,    KC_NO,
   //└───-─────┴─────-───┴──────-──┴───┬──-──┴───┬──-──┴───┬──-──┴───┬─-───┘        └─-──┬────┴─-──┬────┴──-─┬────┴──-─┬────┴─-───────┴────-────┴──-──────┘
                                        KC_F20,   TL_LOWR,  KC_SPC,                       KC_BSPC,  TL_UPPR,  KC_ENT
                                    // └─────-───┴───-─────┴─────-───┘                   └──────-──┴───-─────┴─────-───┘
@@ -54,7 +54,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────-┬────────-┬───────-─┬─────-───┬────-────┬──────-──┐                            ┌────────-┬────────-┬───────-─┬─────-───┬────-────┬──────-──┐
      KC_F12,   KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,                                 KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,
   //├────-────┼──────-──┼────-────┼────-────┼──-──────┼────-────┤                            ├─────-───┼────-────┼──-──────┼───-─────┼──-──────┼────-────┤
-     KC_NO,    KC_1,     H_2,      KC_3,     KC_4,     KC_5,                                  KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_PSCR,
+     KC_NO,    KC_1,   LT(0, KC_2), KC_3,     KC_4,     KC_5,                                  KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_PSCR,
   //├──────-──┼─────-───┼────-────┼─────-───┼───-─────┼───-─────┼───-─────┐        ┌───-─────┼────-────┼───-─────┼─────-───┼─────-───┼─────-───┼───-─────┤
      KC_NO,   LSFT(KC_1),LSFT(KC_2), KC_NO,  LSFT(KC_4), LSFT(KC_5),  KC_NO,        KC_NO,   LSFT(KC_6), KC_NO,  LSFT(KC_8), KC_DOT,   KC_NO,    KC_F13,
   //└───-─────┴─────-───┴──────-──┴───┬──-──┴───┬──-──┴───┬──-──┴───┬─-───┘        └─-──┬────┴─-──┬────┴──-─┬────┴──-─┬────┴─-───────┴────-────┴──-──────┘
@@ -66,9 +66,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,                                 KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,
      
   //┌────────-┬────────-┬───────-─┬─────-───┬────-────┬──────-──┐                            ┌────────-┬────────-┬───────-─┬─────-───┬────-────┬──────-──┐
-     QK_BOOT,  KC_NO,    KC_WH_U,  KC_MS_U,  KC_WH_D,  KC_NO,                                 KC_NO,    KC_BTN4,  KC_BTN5,  KC_NO,    KC_NO,    KC_SLEP,
+     QK_BOOT,  KC_NO,    MS_WHLU,  MS_UP,    MS_WHLD,  KC_NO,                                 KC_NO,    MS_BTN4,  MS_BTN5,  KC_NO,    KC_NO,    KC_SLEP,
   //├────-────┼──────-──┼────-────┼────-────┼──-──────┼────-────┤                            ├─────-───┼────-────┼──-──────┼───-─────┼──-──────┼────-────┤
-     KC_NO,    KC_NO,    KC_MS_L,  KC_MS_D,  KC_MS_R,  KC_NO,                                 KC_NO,    KC_BTN1,  KC_BTN2,  KC_NO,    KC_NO,    KC_NO,
+     EE_CLR,    KC_NO,    MS_LEFT,  MS_DOWN,  MS_RGHT,  KC_NO,                                 KC_NO,    MS_BTN1,  MS_BTN2,  KC_NO,    KC_NO,    KC_NO,
   //├──────-──┼─────-───┼────-────┼─────-───┼───-─────┼───-─────┼───-─────┐        ┌───-─────┼────-────┼───-─────┼─────-───┼─────-───┼─────-───┼───-─────┤
      CM_TOGG,  KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    _______,            _______, KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,
   //└───-─────┴─────-───┴──────-──┴───┬──-──┴───┬──-──┴───┬──-──┴───┬─-───┘        └─-──┬────┴─-──┬────┴──-─┬────┴──-─┬────┴─-───────┴────-────┴──-──────┘
@@ -76,6 +76,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                    // └─────-───┴───-─────┴─────-───┘                   └──────-──┴───-─────┴─────-───┘
   )
 };
+
+void keyboard_post_init_user(void) {
+    rgb_matrix_sethsv(212, 255, 80);
+    rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
+}
 
 bool override_hold(uint16_t hold_keycode, keyrecord_t *record) {
    if (!record->tap.count && record->event.pressed) {
@@ -87,46 +92,53 @@ bool override_hold(uint16_t hold_keycode, keyrecord_t *record) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
    switch (keycode) {
+      // Cut on hold
+      case H_X:
+         return override_hold(RCTL(KC_X), record);
+         
+      // Copy on hold
+      case H_C:
+         return override_hold(RCTL(KC_C), record);
+      
+      // Paste on hold
+      case H_V:
+         return override_hold(RCTL(KC_V), record);
+         
+      // ^ on tap 
+      // ¸ on hold
       case LT(0, KC_LBRC):
          return override_hold(KC_RBRC, record);
-      
-      // Numbers + shifted symbols on hold
-      // 1 and !
-      case LT(0, KC_1):
-         return override_hold(LSFT(KC_1), record); 
          
-      // 2 and @
+      // , on tap
+      // ' on hold
+      case LT(0, KC_COMM):
+         return override_hold(LSFT(KC_COMM), record);
+         
+      // 2 on tap
+      // @ on hold
       case LT(0, KC_2):
          return override_hold(RALT(KC_2), record);
          
-      // 4 and $
-      case LT(0, KC_4):
-         return override_hold(LSFT(KC_4), record);
-         
-      // 5 and %
-      case LT(0, KC_5):
-         return override_hold(LSFT(KC_5), record);
-         
-      // 6 and ?
-      case LT(0, KC_6):
-         return override_hold(LSFT(KC_6), record);
-         
-      // 8 and *
-      case LT(0, KC_8):
-         return override_hold(LSFT(KC_8), record);
-         
-         
-      // Cut
-      case LT(0, KC_X):
-         return override_hold(RCTL(KC_X), record);
-         
-      // Copy   
-      case LT(0, KC_C):
-         return override_hold(RCTL(KC_C), record);
-      
-      // Paste   
-      case LT(0, KC_V):
-         return override_hold(RCTL(KC_V), record);
     }
     return true;
 }
+
+bool is_flow_tap_key(uint16_t keycode) {
+    // Disable Flow Tap on shift keys
+    if (keycode == HRM_F || keycode == HRM_J) {
+        return false;
+    }
+    
+    // Keep default behavior for alpha keys
+    switch (get_tap_keycode(keycode)) {
+        case KC_SPC:
+        case KC_A ... KC_Z:
+        case KC_DOT:
+        case KC_COMM:
+        case KC_SCLN:
+        case KC_SLSH:
+            return true;
+    }
+    return false;
+}
+

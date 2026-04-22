@@ -26,14 +26,6 @@
 #define HRM_L LALT_T(KC_L)
 #define HRM_SCLN RGUI_T(KC_SCLN)
 
-// Numbers + shifted symbols on hold
-#define H_1 LT(0, KC_1)
-#define H_2 LT(0, KC_2)
-#define H_4 LT(0, KC_4)
-#define H_5 LT(0, KC_5)
-#define H_6 LT(0, KC_6)
-#define H_8 LT(0, KC_8)
-
 // Cut Copy Paste
 #define H_X LT(0, KC_X)
 #define H_C LT(0, KC_C)

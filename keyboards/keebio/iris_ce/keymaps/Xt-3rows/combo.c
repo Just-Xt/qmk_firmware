@@ -1,12 +1,19 @@
 #include QMK_KEYBOARD_H
 
-// DFJK to enable Caps Lock
-const uint16_t PROGMEM dfjk_caps[] = {HRM_D, HRM_F, HRM_J, HRM_K, COMBO_END};
+#undef COMBO_TERM
+#define COMBO_TERM 20
 
-// GH to enable Caps Word
-const uint16_t PROGMEM gh_caps_word[] = {KC_G, KC_H, COMBO_END};
+// G H
+const uint16_t PROGMEM caps_lock[] = {KC_G, KC_H, COMBO_END};
+
+// F J
+const uint16_t PROGMEM caps_word[] = {HRM_F, HRM_J, COMBO_END};
+
+// D K
+const uint16_t PROGMEM osm_shift[] = {HRM_D, HRM_K, COMBO_END};
 
 combo_t key_combos[] = {
-    COMBO(dfjk_caps, KC_CAPS),
-    COMBO(gh_caps_word, QK_CAPS_WORD_TOGGLE),
+    COMBO(caps_lock, KC_CAPS),
+    COMBO(caps_word, QK_CAPS_WORD_TOGGLE),
+    COMBO(osm_shift, OSM(MOD_LSFT)),
 };

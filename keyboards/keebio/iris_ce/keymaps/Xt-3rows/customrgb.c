@@ -29,9 +29,34 @@ static void apply_inverted_indicator_color(uint8_t index, HSV matrix_hsv) {
    rgb_matrix_set_color_hsv(index, hsv);
 }
 
+static void apply_flashing_indicator_color(uint8_t index, HSV matrix_hsv) {
+   // LED on for half of this ms value
+   uint16_t elapsed = timer_read() % 1000; 
+   
+   if (elapsed < 500) {
+      // LED is "on" - show inverted color
+      apply_inverted_indicator_color(index, matrix_hsv);
+   } else {
+      // LED is "off" - dim or hide
+      rgb_matrix_set_color(index, 0, 0, 0);
+   }
+}
+
+
+//┌────────-┬────────-┬───────-─┬─────-───┬────-────┬──────-──┐                       ┌────────-┬────────-┬───────-─┬─────-───┬────-────┬──────-──┐
+//  [0, 0]    [0, 1]    [0, 2]    [0, 3]    [0, 4]    [0, 5]                             [5, 5]    [5, 4]    [5, 3]    [5, 2]    [5, 1]    [5, 0]
+//├────-────┼──────-──┼────-────┼────-────┼──-──────┼────-────┤                       ├─────-───┼────-────┼──-──────┼───-─────┼──-──────┼────-────┤
+//  [1, 0]    [1, 1]    [1, 2]    [1, 3]    [1, 4]    [1, 5]                             [6, 5]    [6, 4]    [6, 3]    [6, 2]    [6, 1]    [6, 0]
+//├──────-──┼─────-───┼────-────┼─────-───┼───-─────┼───-─────┼───-─────┐   ┌───-─────┼────-────┼───-─────┼─────-───┼─────-───┼─────-───┼───-─────┤
+//  [2, 0]    [2, 1]    [2, 2]    [2, 3]    [2, 4]    [2, 5]    [4, 5]         [9, 5]    [7, 5]    [7, 4]    [7, 3]    [7, 2]    [7, 1]    [7, 0]
+//└───-─────┴─────-───┴──────-──┴───┬──-──┴───┬──-──┴───┬──-──┴───┬─-───┘   └─-──┬────┴─-──┬────┴──-─┬────┴──-─┬────┴─-~~~~~~~┴~~~~~----┴~~~-~~~~~~┘
+//                                    [4, 2]    [4, 3]    [4, 4]                    [9, 4]    [9, 3]    [9, 2]
+//                                  └─────-───┴───-─────┴─────-───┘              └──────-──┴───-─────┴─────-───┘
+                                 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
    const bool caps_lock = host_keyboard_led_state().caps_lock;
    const bool caps_word = is_caps_word_on();
+   const bool oneshot_shift = get_oneshot_mods() & MOD_MASK_SHIFT;
    HSV matrix_hsv = rgb_matrix_get_hsv();
     
    for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
@@ -45,10 +70,29 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             .s = 222,
             .v = matrix_hsv.v
          };
-         
-         // Whole top row, Rainbow gradient animation
+        
+         // Whole top row
          if (row == 0 || row == 5)
          {
+            // Indicators for lock states
+            if (col == 5 && caps_lock)
+            {
+               apply_inverted_indicator_color(index, matrix_hsv);
+               continue;
+            }
+            if (col == 4 && caps_word)
+            { 
+               apply_flashing_indicator_color(index, matrix_hsv);
+               continue;
+            }
+            if (col == 3 && oneshot_shift)
+            {
+               apply_flashing_indicator_color(index, matrix_hsv);
+               continue;
+            }
+            
+            
+            // Rainbow gradient
             bool reverse = false; // or toggle based on layer/state
             
             uint8_t grad_index = reverse 
@@ -58,30 +102,20 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             hsv.h = get_hue_for_index(grad_index, 12);
             
             rgb_matrix_set_color_hsv(index, hsv);
+            
             continue;
          }
+         
          
          // Weird thumb key left
          if ((row == 4 && col == 5))
          {
-            if (caps_lock) {
-               apply_inverted_indicator_color(index, matrix_hsv);
-               continue;
-            }
-            
-            // Base color applied here
             continue;
          }
          
          // Weird thumb key right
          if ((row == 9 && col == 5))
          {
-            if (caps_word) {
-               apply_inverted_indicator_color(index, matrix_hsv);
-               continue;
-            }
-            
-            // Base color applied here
             continue;
          }
          
@@ -93,3 +127,4 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
    return false;
 }
+
